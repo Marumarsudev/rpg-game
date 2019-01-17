@@ -18,7 +18,7 @@ public class ActorAttackScript : MonoBehaviour
     void Update()
     {
         if(InputManager.GetAttackDirection() != Vector2.zero)
-            _actorBody.rotation = Quaternion.LookRotation(Vector3.forward, InputManager.GetAttackDirection());
+            _actorBody.rotation = Quaternion.Lerp(_actorBody.rotation, Quaternion.LookRotation(Vector3.forward, InputManager.GetAttackDirection()), Time.deltaTime * 10);
 
         if(_weapon._canAttack && InputManager.GetAttackKeyDown())
         {

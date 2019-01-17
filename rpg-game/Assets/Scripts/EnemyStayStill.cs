@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class EnemyStayStill : MonoBehaviour
 {
-    private Transform _body;
+    private HealthScript health;
+
+    private Rigidbody2D _player;
+    private Rigidbody2D _body;
     private Vector3 _currentPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        _body = this.gameObject.GetComponent<Transform>();
-        _currentPos = _body.position;
+        _body = this.gameObject.GetComponent<Rigidbody2D>();
+        health = this.gameObject.GetComponent<HealthScript>();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        _body.position = _currentPos;
+        if(health.health > 0)
+            _body.velocity = (_player.position - _body.position) * 1.5f;
     }
 }
