@@ -10,7 +10,7 @@ public class RandomWeapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _heldWeapon = transform.GetChild(1);
+        _heldWeapon = transform.GetChild(0);
         Instantiate(weapons[Random.Range(0,weapons.Count)], _heldWeapon.position, Quaternion.identity, _heldWeapon);
     }
 }

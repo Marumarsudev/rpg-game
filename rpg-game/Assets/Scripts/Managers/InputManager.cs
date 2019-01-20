@@ -2,34 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class InputManager
+public class InputManager : MonoBehaviour
 {
-    private static KeyCode _moveKeyUp = KeyCode.W;
-    private static KeyCode _moveKeyDown = KeyCode.S;
-    private static KeyCode _moveKeyLeft = KeyCode.A;
-    private static KeyCode _moveKeyRight = KeyCode.D;
+    public Joystick move;
+    public Joystick aim;
 
-    private static KeyCode _attackKeyUp = KeyCode.UpArrow;
-    private static KeyCode _attackKeyDown = KeyCode.DownArrow;
-    private static KeyCode _attackKeyLeft = KeyCode.LeftArrow;
-    private static KeyCode _attackKeyRight = KeyCode.RightArrow;
+    private KeyCode _moveKeyUp = KeyCode.W;
+    private KeyCode _moveKeyDown = KeyCode.S;
+    private KeyCode _moveKeyLeft = KeyCode.A;
+    private KeyCode _moveKeyRight = KeyCode.D;
 
-    private static KeyCode _attackKey = KeyCode.Space;
+    private KeyCode _attackKeyUp = KeyCode.UpArrow;
+    private KeyCode _attackKeyDown = KeyCode.DownArrow;
+    private KeyCode _attackKeyLeft = KeyCode.LeftArrow;
+    private KeyCode _attackKeyRight = KeyCode.RightArrow;
 
-    private static Vector2 _moveDirection = new Vector2();
-    private static Vector2 _attackDirection = new Vector2();
+    private KeyCode _attackKey = KeyCode.Space;
 
-    public static bool GetAttackKey()
+    private Vector2 _moveDirection = new Vector2();
+    private Vector2 _attackDirection = new Vector2();
+
+    public bool GetAttackKey()
     {
         return Input.GetKey(_attackKey);
     }
 
-    public static bool GetAttackKeyDown()
+    public bool GetAttackKeyDown()
     {
         return Input.GetKeyDown(_attackKey);
     }
 
-    public static Vector2 GetMoveDirection()
+    public Vector2 GetJoyMove()
+    {
+        return new Vector2(move.Horizontal, move.Vertical);
+    }
+
+    public Vector2 GetJoyAim()
+    {
+        return new Vector2(aim.Horizontal, aim.Vertical);
+    }
+
+    public Vector2 GetMoveDirection()
     {
         _moveDirection = Vector2.zero;
 
@@ -54,7 +67,7 @@ public static class InputManager
         return _moveDirection.normalized;
     }
 
-    public static Vector2 GetAttackDirection()
+    public Vector2 GetAttackDirection()
     {
         _attackDirection = Vector2.zero;
 

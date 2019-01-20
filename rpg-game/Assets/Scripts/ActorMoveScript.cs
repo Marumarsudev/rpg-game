@@ -9,9 +9,12 @@ public class ActorMoveScript : MonoBehaviour
 
     private Rigidbody2D _actorBody;
 
+    private InputMngr InputManager;
+
     // Start is called before the first frame update
     void Start()
     {
+        InputManager = FindObjectOfType<InputMngr>();
         _actorBody = this.gameObject.GetComponent<Rigidbody2D>();
     }
 
