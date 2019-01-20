@@ -21,7 +21,14 @@ public class EnemyStayStill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(health.health > 0)
-            _body.velocity = (_player.position - _body.position) * 1.5f;
+        if(health.health > 0 && Vector2.Distance(_player.position, _body.position) > 0.5)
+        {
+            _body.velocity = Vector2.ClampMagnitude((_player.position - _body.position), 1) * 1.5f;
+        }
+        else
+        {
+            _body.velocity = Vector3.zero;
+        }
+
     }
 }

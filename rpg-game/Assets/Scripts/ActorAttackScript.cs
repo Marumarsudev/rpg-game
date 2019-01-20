@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class ActorAttackScript : MonoBehaviour
 {
-    public WeaponScript _weapon;
+    private WeaponScript _weapon;
 
     private Transform _actorBody;
 
     void Start()
     {
+        _weapon = GetComponentInChildren<WeaponScript>();
         _actorBody = this.gameObject.GetComponent<Transform>();
     }
 
@@ -18,11 +19,12 @@ public class ActorAttackScript : MonoBehaviour
     void Update()
     {
         if(InputManager.GetAttackDirection() != Vector2.zero)
-            _actorBody.rotation = Quaternion.Lerp(_actorBody.rotation, Quaternion.LookRotation(Vector3.forward, InputManager.GetAttackDirection()), Time.deltaTime * 10);
-
-        if(_weapon._canAttack && InputManager.GetAttackKeyDown())
         {
-            _weapon.Attack();
+            _actorBody.rotation = Quaternion.Lerp(_actorBody.rotation, Quaternion.LookRotation(Vector3.forward, InputManager.GetAttackDirection()), Time.deltaTime * 50);
+            if(_weapon.canAttack)
+            {
+                _weapon.Attack();
+            }
         }
     }
 }
