@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WeaponScript : MonoBehaviour
 {
+    public float weaponRange;
     public float weaponDmg;
     public int attackDelay;
 

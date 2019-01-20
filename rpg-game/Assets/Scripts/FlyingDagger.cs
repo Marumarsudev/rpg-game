@@ -8,10 +8,13 @@ public class FlyingDagger : MonoBehaviour
     public float lifetime;
     public float damage;
 
+    public Collider2D weilderCollider;
+
     public Vector3 dir;
     // Start is called before the first frame update
     void Start()
     {
+        Physics2D.IgnoreCollision(weilderCollider, GetComponent<Collider2D>());
         Invoke("DestroyDagger", lifetime);
     }
 

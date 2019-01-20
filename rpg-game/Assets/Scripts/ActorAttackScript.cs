@@ -21,10 +21,10 @@ public class ActorAttackScript : MonoBehaviour
         if(InputManager.GetAttackDirection() != Vector2.zero)
         {
             _actorBody.rotation = Quaternion.Lerp(_actorBody.rotation, Quaternion.LookRotation(Vector3.forward, InputManager.GetAttackDirection()), Time.deltaTime * 50);
-            if(_weapon.canAttack)
-            {
-                _weapon.Attack();
-            }
+        }
+        if(_weapon.canAttack && InputManager.GetAttackKey())
+        {
+            _weapon.Attack();
         }
     }
 }

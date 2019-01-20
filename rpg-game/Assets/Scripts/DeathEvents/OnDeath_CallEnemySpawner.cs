@@ -6,6 +6,6 @@ public class OnDeath_CallEnemySpawner : OnDeath
 {
     public override void CallOnDeath()
     {
-        GameObject.FindObjectOfType<EnemySpawner>().SpawnEnemy();
+        GameObject.FindObjectOfType<EnemySpawner>().SpawnEnemy(this.GetComponent<EnemyScript>());
     }
 }

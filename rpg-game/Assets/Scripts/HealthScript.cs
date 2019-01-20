@@ -38,6 +38,7 @@ public class HealthScript : MonoBehaviour
 
     private void Death()
     {
+        GetComponent<Collider2D>().enabled = false;
         LeanTween.alpha(this.gameObject, 0, 0.5f).setDestroyOnComplete(true);
         deathEvents.ForEach(dE => {
             dE.CallOnDeath();
