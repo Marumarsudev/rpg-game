@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 981404145763588987}
   - component: {fileID: 337834593384972133}
   - component: {fileID: 2444995789402224391}
+  - component: {fileID: 5338209134500859097}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -137,6 +138,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathEvents:
   - {fileID: 981404145763588987}
+  takedamageEvents:
+  - {fileID: 5338209134500859097}
   health: 20
   calculateHealth: 0
 --- !u!114 &981404145763588987
@@ -175,6 +178,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe5eecadc17c4c34c8b2d3b993bc317f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 2
+  stateMagnitude: 0
+  doAttacks: 3
+--- !u!114 &5338209134500859097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017274618373507109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57ea64ee794947f46b0674f7c4fa5587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7365393342289614299

@@ -11,7 +11,7 @@ public class DefaultDaggerAttack : AttackMixinBase
 
     public override async void Attack()
     {
-        if(_weaponScript)
+        try
         {
             ltAttackDelay = (float)_weaponScript.attackDelay / 1000;
             _weaponScript.canAttack = false;
@@ -32,5 +32,6 @@ public class DefaultDaggerAttack : AttackMixinBase
             await Task.Delay(_weaponScript.attackDelay);
             _weaponScript.canAttack = true;
         }
+        catch{}
     }
 }

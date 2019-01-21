@@ -7,6 +7,8 @@ public class HealthScript : MonoBehaviour
 {
     public List<OnDeath> deathEvents = new List<OnDeath>();
 
+    public List<OnTakeDamage> takedamageEvents = new List<OnTakeDamage>();
+
     public float health;
     public bool calculateHealth = false;
 
@@ -20,15 +22,22 @@ public class HealthScript : MonoBehaviour
 
     private async void DamageAnim()
     {
+        try
+        {
         LeanTween.color(this.gameObject, new Color(255, 0, 0), 0.1f);
         await Task.Delay(100);
         LeanTween.color(this.gameObject, origColor, 0.1f);
+        }
+        catch{}
     }
 
     public void TakeDamage(float dmg)
     {
         if(health > 0)
         {
+            takedamageEvents.ForEach(tDE => {
+                tDE.CallOnTakeDamage();
+            });
             DamageAnim();
             health -= dmg;
             if (health <= 0)

@@ -18,7 +18,7 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
         _player = FindObjectOfType<ActorMoveScript>().transform;
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 3; i++)
         {
             _spawnPoint = new Vector3(_player.position.x + Random.Range(-5, 5), _player.position.y + Random.Range(-5, 5), 0);
             SpawnedEnemies.Add(Instantiate(enemy, _spawnPoint, Quaternion.identity));

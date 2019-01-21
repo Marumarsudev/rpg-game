@@ -26,11 +26,7 @@ public class ActorAttackScript : MonoBehaviour
             _actorBody.rotation = Quaternion.Lerp(_actorBody.rotation, Quaternion.LookRotation(Vector3.forward, InputManager.GetAttackDirection()), Time.deltaTime * 50);
         }
 
-        if(SystemInfo.deviceType == DeviceType.Handheld && _weapon.canAttack)
-        {
-            _weapon.Attack();
-        }
-        else if(_weapon.canAttack && InputManager.GetAttackKey())
+        if(_weapon.canAttack && InputManager.GetAttackKey())
         {
             _weapon.Attack();
         }
