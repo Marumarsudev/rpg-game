@@ -416,6 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathEvents: []
+  takedamageEvents: []
   health: 20000
   calculateHealth: 0
 --- !u!1 &486318224
