@@ -4,91 +4,31 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public Joystick move;
-    public Joystick aim;
+    private Camera mainCamera;
 
-    private KeyCode _moveKeyUp = KeyCode.W;
-    private KeyCode _moveKeyDown = KeyCode.S;
-    private KeyCode _moveKeyLeft = KeyCode.A;
-    private KeyCode _moveKeyRight = KeyCode.D;
-
-    private KeyCode _attackKeyUp = KeyCode.UpArrow;
-    private KeyCode _attackKeyDown = KeyCode.DownArrow;
-    private KeyCode _attackKeyLeft = KeyCode.LeftArrow;
-    private KeyCode _attackKeyRight = KeyCode.RightArrow;
-
-    private KeyCode _attackKey = KeyCode.Space;
-
-    private Vector2 _moveDirection = new Vector2();
-    private Vector2 _attackDirection = new Vector2();
-
-    public bool GetAttackKey()
+    private void Awake()
     {
-        return Input.GetKey(_attackKey);
+        mainCamera = FindObjectOfType<Camera>();
+        DontDestroyOnLoad(this.gameObject);
     }
 
-    public bool GetAttackKeyDown()
-    {
-        return Input.GetKeyDown(_attackKey);
-    }
+    public Vector2 GetMovement() => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
+    public Vector2 GetAim() => new Vector2(Input.GetAxis("HorizontalAim"), Input.GetAxis("VerticalAim")).normalized;
 
-    public Vector2 GetJoyMove()
-    {
-        return new Vector2(move.Horizontal, move.Vertical);
-    }
+    public Vector3 GetMousePosition() => mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
-    public Vector2 GetJoyAim()
-    {
-        return new Vector2(aim.Horizontal, aim.Vertical);
-    }
+    public bool GetAttack() => Input.GetButton("Attack");
+    public bool GetAttackDown() => Input.GetButtonDown("Attack");
 
-    public Vector2 GetMoveDirection()
-    {
-        _moveDirection = Vector2.zero;
+    public bool GetDefend() => Input.GetButton("Defend");
+    public bool GetDefendDown() => Input.GetButtonDown("Defend");
 
-        if(Input.GetKey(_moveKeyUp))
-        {
-            _moveDirection.y = 1;
-        }
-        else if(Input.GetKey(_moveKeyDown))
-        {
-            _moveDirection.y = -1;
-        }
+    public bool GetDash() => Input.GetButton("Dash");
+    public bool GetDashDown() => Input.GetButtonDown("Dash");
 
-        if(Input.GetKey(_moveKeyRight))
-        {
-            _moveDirection.x = 1;
-        }
-        else if(Input.GetKey(_moveKeyLeft))
-        {
-            _moveDirection.x = -1;
-        }
+    public bool GetSubmit() => Input.GetButton("Submit");
+    public bool GetSubmitDown() => Input.GetButtonDown("Submit");
 
-        return _moveDirection.normalized;
-    }
-
-    public Vector2 GetAttackDirection()
-    {
-        _attackDirection = Vector2.zero;
-
-        if(Input.GetKey(_attackKeyUp))
-        {
-            _attackDirection.y = 1;
-        }
-        else if(Input.GetKey(_attackKeyDown))
-        {
-            _attackDirection.y = -1;
-        }
-
-        if(Input.GetKey(_attackKeyRight))
-        {
-            _attackDirection.x = 1;
-        }
-        else if(Input.GetKey(_attackKeyLeft))
-        {
-            _attackDirection.x = -1;
-        }
-
-        return _attackDirection.normalized;
-    }
+    public bool GetCancel() => Input.GetButton("Cancel");
+    public bool GetCancelDown() => Input.GetButtonDown("Cancel");
 }
