@@ -97,6 +97,9 @@ MonoBehaviour:
   - {fileID: 7400000, guid: fb75462690fd7d741939329c8992beb6, type: 2}
   - {fileID: 7400000, guid: cecf3158bb248564cb78d70e29d52e20, type: 2}
   - {fileID: 7400000, guid: 0e97257f35dc5314c90f97ac08b08974, type: 2}
+  - {fileID: 7400000, guid: f8a991efc5304804f9ff2c01590bd0f6, type: 2}
+  - {fileID: 7400000, guid: 642d7b27a8d56944ca077b8eb85f3d48, type: 2}
+  damage: 5
 --- !u!61 &4132042741479364269
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -107,7 +110,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.000000029802322, y: 0.9058486}

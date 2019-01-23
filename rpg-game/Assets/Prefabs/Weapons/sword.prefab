@@ -91,7 +91,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.00011803582, y: 0.10882568}
@@ -123,3 +123,6 @@ MonoBehaviour:
   - {fileID: 7400000, guid: 3ca85b6261e07664ebbf48da2696cda5, type: 2}
   - {fileID: 7400000, guid: 8684af33beb5f334e88217f0276bb261, type: 2}
   - {fileID: 7400000, guid: 3cb32d2f5a5e48c44bdcab3cf959900e, type: 2}
+  - {fileID: 7400000, guid: 75746b5717edc1d4e825bb1a07557233, type: 2}
+  - {fileID: 7400000, guid: f6c3b2ef88562d440b6b069f7fa2b4e0, type: 2}
+  damage: 3

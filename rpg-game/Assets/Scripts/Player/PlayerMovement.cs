@@ -38,12 +38,23 @@ public class PlayerMovement : MonoBehaviour
         {
             animationManager.SetTrigger("Attack");
         }
-        else
+        else if (InputManager.GetAttackUp())
         {
             animationManager.ResetTrigger("Attack");
         }
 
-        animationManager.SetFloat("speed", Mathf.Abs(moveDirection.x) + Mathf.Abs(moveDirection.y));
+        if(InputManager.GetDefend() && !animationManager.GetBool("Defending"))
+        {
+            animationManager.SetBool("Defending", true);
+            animationManager.SetTrigger("Defend");
+        }
+        else if(InputManager.GetDefendUp())
+        {
+            animationManager.ResetTrigger("Defend");
+            animationManager.SetBool("Defending", false);
+        }
+
+        animationManager.SetFloat("speed", Mathf.Clamp01(Mathf.Abs(moveDirection.x) + Mathf.Abs(moveDirection.y)));
     }
 
     void FixedUpdate()

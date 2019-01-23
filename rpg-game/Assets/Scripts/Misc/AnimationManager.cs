@@ -18,9 +18,11 @@ public class AnimationManager : MonoBehaviour
         animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = animatorOverrideController;
 
-        animatorOverrideController["characteridle"] = weapon.weaponAnimations[0];
-        animatorOverrideController["characterattack"] = weapon.weaponAnimations[1];
-        animatorOverrideController["charactermove"] = weapon.weaponAnimations[2];
+        animatorOverrideController["character_idle"] = weapon.weaponAnimations[0];
+        animatorOverrideController["character_attack"] = weapon.weaponAnimations[1];
+        animatorOverrideController["character_move"] = weapon.weaponAnimations[2];
+        animatorOverrideController["character_defend_enter"] = weapon.weaponAnimations[3];
+        animatorOverrideController["character_defend_cycle"] = weapon.weaponAnimations[4];
     }
 
     public void SetTrigger(string name)
@@ -37,6 +39,8 @@ public class AnimationManager : MonoBehaviour
     {
         animator.SetBool(name, set);
     }
+
+    public bool GetBool(string name) => animator.GetBool(name);
 
     public void SetFloat(string name, float set)
     {

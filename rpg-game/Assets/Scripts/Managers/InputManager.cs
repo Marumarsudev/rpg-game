@@ -19,9 +19,11 @@ public class InputManager : MonoBehaviour
 
     public bool GetAttack() => Input.GetButton("Attack");
     public bool GetAttackDown() => Input.GetButtonDown("Attack");
+    public bool GetAttackUp() => Input.GetButtonUp("Attack");
 
     public bool GetDefend() => Input.GetButton("Defend");
     public bool GetDefendDown() => Input.GetButtonDown("Defend");
+    public bool GetDefendUp() => Input.GetButtonUp("Defend");
 
     public bool GetDash() => Input.GetButton("Dash");
     public bool GetDashDown() => Input.GetButtonDown("Dash");

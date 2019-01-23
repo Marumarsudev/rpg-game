@@ -8,9 +8,9 @@ public class WeaponBase : MonoBehaviour
     private Collider2D hitBox;
 
     //Properties
-
-    [Tooltip("0: idle\n1: attack\n2: move")]
+    [Tooltip("0: idle\n1: attack\n2: move\n3: defend_enter\n4: defend_cycle")]
     public AnimationClip[] weaponAnimations;
+    public float damage;
 
     // Start is called before the first frame update
     void Awake()
@@ -27,5 +27,14 @@ public class WeaponBase : MonoBehaviour
     public void DisableHitBox()
     {
         hitBox.enabled = false;
+    }
+
+    
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.GetComponent<Health>())
+        {
+            col.GetComponent<Health>().TakeDamage(damage);
+        }
     }
 }
