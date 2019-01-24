@@ -18,11 +18,14 @@ public class AnimationManager : MonoBehaviour
         animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = animatorOverrideController;
 
-        animatorOverrideController["character_idle"] = weapon.weaponAnimations[0];
-        animatorOverrideController["character_attack"] = weapon.weaponAnimations[1];
-        animatorOverrideController["character_move"] = weapon.weaponAnimations[2];
-        animatorOverrideController["character_defend_enter"] = weapon.weaponAnimations[3];
-        animatorOverrideController["character_defend_cycle"] = weapon.weaponAnimations[4];
+        if(weapon)
+        {
+            animatorOverrideController["character_idle"] = weapon.weaponAnimations[0];
+            animatorOverrideController["character_attack"] = weapon.weaponAnimations[1];
+            animatorOverrideController["character_move"] = weapon.weaponAnimations[2];
+            animatorOverrideController["character_defend_enter"] = weapon.weaponAnimations[3];
+            animatorOverrideController["character_defend_cycle"] = weapon.weaponAnimations[4];
+        }
     }
 
     public void SetTrigger(string name)
