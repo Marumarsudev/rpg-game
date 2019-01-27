@@ -4,20 +4,10 @@ using UnityEngine;
 
 public class AStarPathing : MonoBehaviour
 {
-    public Transform sPoint;
-    public Transform ePoint;
+    public bool debugDraw = false;
 
     private Node[,] nodeGrid;
-
     private AStarGrid aStarGrid;
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            GetRoute(sPoint.position, ePoint.position);
-        }
-    }
 
     private void Start()
     {
@@ -41,9 +31,12 @@ public class AStarPathing : MonoBehaviour
 
     private void DebugDrawRoute(List<Vector2> route)
     {
-        for(int i = 0; i < route.Count - 1; i++)
+        if(debugDraw)
         {
-            Debug.DrawLine(route[i], route[i+1], Color.green, 2.0f);
+            for(int i = 0; i < route.Count - 1; i++)
+            {
+                Debug.DrawLine(route[i], route[i+1], Color.green, 2.0f);
+            }
         }
     }
 
@@ -74,28 +67,31 @@ public class AStarPathing : MonoBehaviour
 
     public List<Vector2> GetRoute(Vector2 sPos, Vector2 ePos)
     {
+
         List<Node> openNodes = new List<Node>();
         HashSet<Node> closedNodes = new HashSet<Node>();
 
-        nodeGrid = GetComponent<AStarGrid>().NodeGrid;
+        //nodeGrid = GetComponent<AStarGrid>().NodeGrid;
 
         List<Vector2> route = new List<Vector2>();
 
         Node sNode = WorldPositionToNode(sPos);
         Node eNode = WorldPositionToNode(ePos);
 
+        bool pathFound = false;
 
         for (int y = 0; y < nodeGrid.GetLength(1); y++)
         {
             for (int x = 0; x < nodeGrid.GetLength(0); x++)
             {
+                nodeGrid[x, y].previousNode = null;
                 nodeGrid[x, y].gScore = DistanceBetweenNodes(nodeGrid[x, y], sNode);
             }
         }
 
         openNodes.Add(sNode);
 
-        while(openNodes.Count > 0)
+        while(openNodes.Count > 0 && !pathFound)
         {
             
             Node node = openNodes[0];
@@ -115,6 +111,7 @@ public class AStarPathing : MonoBehaviour
 
             if(node.posX == eNode.posX && node.posY == eNode.posY)
             {
+                pathFound = true;
                 return ReconstructRoute(sNode, node);
             }
 

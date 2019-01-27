@@ -17,7 +17,7 @@ public class AStarGrid : MonoBehaviour
     public float castRadius = 0.5f;
 
     [Tooltip("0 for no updates || float updates every n second")]
-    public float updateGridRuntime = 0;
+    public bool updateGridRuntime = false;
 
     private Node[,] nodeGrid;
 
@@ -32,19 +32,25 @@ public class AStarGrid : MonoBehaviour
         sizeX = Mathf.RoundToInt(GridWorldSize.x / (nodeRadius * 2));
         sizeY = Mathf.RoundToInt(GridWorldSize.y / (nodeRadius * 2));
 
-        if(updateGridRuntime > 0)
-        {
-            InvokeRepeating("ReCreateGrid", 0.0f, updateGridRuntime);
-        }
-        else
-        {
-            CreateGrid(sizeX, sizeY, nodeRadius);
-        }
+        CreateGrid(sizeX, sizeY, nodeRadius);
     }
 
-    private void ReCreateGrid()
+    private void Update()
     {
-        CreateGrid(sizeX, sizeY, nodeRadius);
+        if(updateGridRuntime)
+        {
+            foreach(Node node in nodeGrid)
+            {
+                if(Physics2D.CircleCast(node.posInWorld, castRadius, Vector2.one * castRadius, 0, wallMask))
+                {
+                    node.isNonWalkable = true;
+                }
+                else
+                {
+                    node.isNonWalkable = false;
+                }
+            }
+        }
     }
 
     private void CreateGrid(int sX, int sY, float nR)
@@ -55,7 +61,6 @@ public class AStarGrid : MonoBehaviour
         {
             for (int x = 0; x < sX; x++)
             {
-                //Vector2 nodePosInWorld = new Vector2(startPos.x + (float)x * nodeRadius * 2, startPos.y + (float)y * nodeRadius * 2);
                 Vector2 nodePosInWorld = bottomLeft + Vector2.right * (x * (nodeRadius * 2) + nodeRadius) + Vector2.up * (y * (nodeRadius * 2) + nodeRadius);
                 bool iW = false;
                 if(Physics2D.CircleCast(nodePosInWorld, castRadius, Vector2.one * castRadius, 0, wallMask))

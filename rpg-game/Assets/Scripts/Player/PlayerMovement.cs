@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     //Components
     private Rigidbody2D body;
     private AnimationManager animationManager;
-    //private Animator animator;
 
     //Properties
     [SerializeField]
@@ -65,11 +64,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move(Vector2 dir, float speed)
     {
-        body.velocity = dir * speed * Time.deltaTime;
+        body.velocity = dir * speed;
     }
 
     private void Turn(Vector2 dir)
     {
-        body.transform.up = lookDirection;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 }
