@@ -13,6 +13,8 @@ public class WeaponBase : MonoBehaviour
     public float damage;
     public float range;
 
+    private List<Collider2D> collidersHit = new List<Collider2D>();
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -30,12 +32,20 @@ public class WeaponBase : MonoBehaviour
         hitBox.enabled = false;
     }
 
+    public void ClearCollidersHit()
+    {
+        collidersHit.Clear();
+    }
     
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.GetComponent<Health>())
+        if(!collidersHit.Contains(col))
         {
-            col.GetComponent<Health>().TakeDamage(damage);
+            if(col.GetComponent<Health>())
+            {
+                col.GetComponent<Health>().TakeDamage(damage);
+                collidersHit.Add(col);
+            }
         }
     }
 }

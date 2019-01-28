@@ -125,5 +125,6 @@ MonoBehaviour:
   - {fileID: 7400000, guid: 3cb32d2f5a5e48c44bdcab3cf959900e, type: 2}
   - {fileID: 7400000, guid: 75746b5717edc1d4e825bb1a07557233, type: 2}
   - {fileID: 7400000, guid: f6c3b2ef88562d440b6b069f7fa2b4e0, type: 2}
-  damage: 3
+  damage: 0.5
   range: 0.3
+  attackSpeed: 1.25

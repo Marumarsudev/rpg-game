@@ -33,9 +33,9 @@ public class Health : MonoBehaviour
     {
         if (currentHealth > 0)
         {
+            Debug.Log("Took dmg!!!");
             animationManager.SetTrigger("Damage");
             currentHealth -= dmg;
-            //Debug.Log(this.name + " Took " + dmg.ToString() + " and has " + currentHealth.ToString() + "/" + maxHealth.ToString() + " HP left!");
             if(currentHealth <= 0)
             {
                 Death();

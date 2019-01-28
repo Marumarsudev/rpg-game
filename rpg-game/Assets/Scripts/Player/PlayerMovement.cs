@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     //Dependencies
     private Health health;
     private Text hpText;
+    private WeaponBase weapon;
 
     //Components
     private Rigidbody2D body;
@@ -18,10 +19,16 @@ public class PlayerMovement : MonoBehaviour
 
     //Properties
     [SerializeField]
-    private float speed = 1000.0f;
+    private float speed = 0.0f;
+    [SerializeField]
+    private float dashMaxSpeed = 0.0f;
 
     private Vector2 moveDirection;
     private Vector2 lookDirection;
+
+    private float currentDashSpeed = 1.0f;
+
+    private LTDescr turnTween;
 
     // Start is called before the first frame update
     void Awake()
@@ -31,6 +38,14 @@ public class PlayerMovement : MonoBehaviour
         animationManager = GetComponent<AnimationManager>();
         health = GetComponent<Health>();
         hpText = GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Text>();
+        weapon = GetComponentInChildren<WeaponBase>();
+    }
+
+    void FixedUpdate()
+    {
+        Move(moveDirection, speed);
+        Turn(lookDirection);
+        DashSpeedDecrease(0.05f);
     }
 
     // Update is called once per frame
@@ -38,46 +53,76 @@ public class PlayerMovement : MonoBehaviour
     {
         hpText.text = "Hitpoints: " + health.CurrentHealth.ToString() + "/" + health.MaxHealth.ToString();
 
-        moveDirection = InputManager.GetMovement();
-        lookDirection = Vector2.ClampMagnitude((Vector2)InputManager.GetMousePosition() - body.position, 1.0f);
-
-        if(InputManager.GetAttack())
+        if(health.CurrentHealth > 0)
         {
-            animationManager.SetTrigger("Attack");
+            moveDirection = InputManager.GetMovement();
+            lookDirection = Vector2.ClampMagnitude((Vector2)InputManager.GetMousePosition() - body.position, 1.0f);
         }
-        else if (InputManager.GetAttackUp())
+        else
         {
-            animationManager.ResetTrigger("Attack");
+            moveDirection = Vector2.zero;
         }
 
-        if(InputManager.GetDefend() && !animationManager.GetBool("Defending"))
-        {
-            animationManager.SetBool("Defending", true);
-            animationManager.SetTrigger("Defend");
-        }
-        else if(InputManager.GetDefendUp())
-        {
-            animationManager.ResetTrigger("Defend");
-            animationManager.SetBool("Defending", false);
-        }
+        GetInputs();
 
         animationManager.SetFloat("speed", Mathf.Clamp01(Mathf.Abs(moveDirection.x) + Mathf.Abs(moveDirection.y)));
     }
 
-    void FixedUpdate()
+    private void GetInputs()
     {
-        Move(moveDirection, speed);
-        Turn(lookDirection);
+        if(health.CurrentHealth > 0)
+        {
+            if(InputManager.GetAttack())
+            {
+                animationManager.SetTrigger("Attack");
+            }
+            else if (InputManager.GetAttackUp())
+            {
+                animationManager.ResetTrigger("Attack");
+            }
+
+            if(InputManager.GetDefend() && !animationManager.GetBool("Defending"))
+            {
+                animationManager.SetBool("Defending", true);
+                animationManager.SetTrigger("Defend");
+            }
+            else if(InputManager.GetDefendUp())
+            {
+                animationManager.ResetTrigger("Defend");
+                animationManager.SetBool("Defending", false);
+            }
+
+            if (InputManager.GetDashDown() && currentDashSpeed <= 1.0f)
+            {
+                currentDashSpeed = dashMaxSpeed;
+            }
+        }
+    }
+
+    private void DashSpeedDecrease(float dec)
+    {
+        currentDashSpeed -= dec;
+        if(currentDashSpeed < 1)
+            currentDashSpeed = 1;
     }
 
     private void Move(Vector2 dir, float speed)
     {
-        body.velocity = dir * speed;
+        body.velocity = dir * speed * currentDashSpeed;
     }
 
     private void Turn(Vector2 dir)
     {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+
+        if(animationManager.GetFloat("Attacking") > 0.5f)
+        {
+            //transform.rotation = transform.rotation;
+        }
+        else
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.2f);
+            // transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        }
     }
 }

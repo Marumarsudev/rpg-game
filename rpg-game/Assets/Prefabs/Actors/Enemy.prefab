@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5cb9ba3471e7b049ba8308c41a670a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 5
 --- !u!114 &3090981393865446529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,9 +259,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waitUntilAttack:
     min: 3
-    max: 5
+    max: 3
   maxRangeFromPlayer: 3
+  atPlayerLeaveRangeMult: 2
   speed: 2.5
+  attackSpeedMult: 1.5
+  doAttackRangeDist: 1.25
+  attackDelayAfterReachedPlayer: 0.5
+  enemyUpdateRate: 0.075
   mask:
     serializedVersion: 2
     m_Bits: 256

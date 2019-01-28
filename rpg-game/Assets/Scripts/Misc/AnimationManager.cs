@@ -43,6 +43,8 @@ public class AnimationManager : MonoBehaviour
         animator.SetBool(name, set);
     }
 
+    public float GetFloat(string name) => animator.GetFloat(name);
+
     public bool GetBool(string name) => animator.GetBool(name);
 
     public void SetFloat(string name, float set)

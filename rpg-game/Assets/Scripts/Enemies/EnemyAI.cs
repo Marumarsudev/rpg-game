@@ -36,9 +36,16 @@ public class EnemyAI : MonoBehaviour
     public timeUntilAttack waitUntilAttack;
     private float waitedUntilAttack = 0.0f;
     public float maxRangeFromPlayer;
+    public float atPlayerLeaveRangeMult;
     public float speed;
+    public float attackSpeedMult;
+    public float doAttackRangeDist;
+    public float attackDelayAfterReachedPlayer;
     private States state = States.MovingToPlayer;
     private List<Vector2> currentPath = new List<Vector2>();
+
+    public float enemyUpdateRate = 0.05f;
+    private float enemyUpdateTime = 0.00f;
 
     public LayerMask mask;
     public LayerMask enemyMask;
@@ -62,10 +69,14 @@ public class EnemyAI : MonoBehaviour
     {
         switch(state)
         {
+            case States.AtPlayer:
+                waitedUntilAttack += Time.deltaTime;
+            break;
+
             case States.Attacking:
-            if(body.velocity.magnitude > speed * 2)
+            if(body.velocity.magnitude > speed * attackSpeedMult)
             {
-                body.velocity = body.velocity.normalized * speed * 2;
+                body.velocity = body.velocity.normalized * speed * attackSpeedMult;
             }
             break;
             
@@ -101,10 +112,13 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if(health.CurrentHealth > 0 && target != null)
+        if(health.CurrentHealth > 0 && target != null && enemyUpdateTime >= enemyUpdateRate)
         {
+            enemyUpdateTime = 0.0f;
             UpdateBehaviour();
         }
+
+        enemyUpdateTime += Time.deltaTime;
     }
 
     void UpdateBehaviour()
@@ -120,9 +134,9 @@ public class EnemyAI : MonoBehaviour
 
         if (target.tag == "Player")
         {
-            foreach (var enemy in Physics2D.CircleCastAll(transform.position, 2f, Vector2.zero, 0.0f, enemyMask))
+            foreach (var enemy in Physics2D.CircleCastAll(transform.position, 3f, Vector2.zero, 0.0f, enemyMask))
             {
-                if(enemy.transform.gameObject != transform.gameObject && enemy.transform.GetComponent<EnemyAI>().state == States.Attacking)
+                if(enemy.transform.gameObject != transform.gameObject /*&& enemy.transform.GetComponent<EnemyAI>().state == States.Attacking*/)
                 {
                     Vector2 hd = (Vector2)enemy.transform.position - body.position;
                     float dist = hd.magnitude;
@@ -146,7 +160,15 @@ public class EnemyAI : MonoBehaviour
 
             if(distanceFromPlayer < maxRange)
             {
-                state = States.Attacking;
+                if(attackDelayAfterReachedPlayer == 0.0f)
+                {
+                    state = States.Attacking;
+                }
+                else
+                {
+                    waitedUntilAttack = Mathf.Abs(waitUntilAttack.min - attackDelayAfterReachedPlayer);
+                    state = States.AtPlayer;
+                }
             }
             else if(currentPath.Count == 0 || Vector2.Distance(currentPath[currentPath.Count - 1], target.position) > 2.0f)
             {
@@ -173,28 +195,39 @@ public class EnemyAI : MonoBehaviour
             body.velocity = Vector2.zero;
             LookAtTarget(target.position);
 
-            waitedUntilAttack += Time.deltaTime;
-
             if(waitedUntilAttack >= Random.Range(waitUntilAttack.min, waitUntilAttack.max))
             {
                 waitedUntilAttack = 0.0f;
                 state = States.Attacking;
             }
-            else if(distanceFromPlayer > maxRange * 1.5f)
+            else if(distanceFromPlayer > maxRange * atPlayerLeaveRangeMult)
             {
                 waitedUntilAttack = 0.0f;
                 state = States.MovingToPlayer;
             }
-
             break;
 
             case States.Attacking:
-                LookAtTarget(target.position);
-                body.AddForce(direction * speed * 2, ForceMode2D.Impulse);
-                if(distanceFromPlayer <= (weapon.range + 1f) * (weapon.range + 1f))
+                try
                 {
-                    animationManager.SetTrigger("Attack");
+                if(Physics2D.Raycast(body.position + direction, direction, distanceFromPlayer).transform.gameObject == target.gameObject)
+                {
+                    LookAtTarget(target.position);
+                    body.AddForce(direction * speed * attackSpeedMult, ForceMode2D.Impulse);
+                    if(distanceFromPlayer <= (weapon.range + doAttackRangeDist) * (weapon.range + doAttackRangeDist))
+                    {
+                        animationManager.SetTrigger("Attack");
+                        state = States.AtPlayer;
+                    }
+                }
+                else
+                {
                     state = States.AtPlayer;
+                }
+                }
+                catch
+                {
+                    Debug.Log("Target went missing");
                 }
             break;
 
@@ -208,7 +241,9 @@ public class EnemyAI : MonoBehaviour
         Vector2 direction = target - body.position;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.1f);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), enemyUpdateRate);
+        LeanTween.rotateZ(this.gameObject, angle - 90, 0.3f);
+
     }
 
         void MoveAlongPath()
