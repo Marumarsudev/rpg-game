@@ -26,6 +26,45 @@ public class AStarPathing : MonoBehaviour
         int ix = Mathf.RoundToInt((aStarGrid.sizeX - 1) * ixPos);
         int iy = Mathf.RoundToInt((aStarGrid.sizeY - 1) * iyPos);
 
+        if (nodeGrid[ix, iy].isNonWalkable)
+        {
+            List<Node> neighborNodes = new List<Node>();
+
+            for (int y = -1; y <= 1; y++)
+            {
+                for (int x = -1; x <= 1; x++)
+                {
+                    if (x == 0 && y == 0)
+                        continue;
+
+                    int checkX = nodeGrid[ix, iy].posX + x;
+                    int checkY = nodeGrid[ix, iy].posY + y;
+
+
+                    if (checkX >= 0 && checkX < nodeGrid.GetLength(0) && checkY >= 0 && checkY < nodeGrid.GetLength(1))
+                    {
+                        if (!nodeGrid[checkX, checkY].isNonWalkable)
+                            neighborNodes.Add(nodeGrid[checkX, checkY]);
+                    }
+                }
+            }
+
+            Node closestTo = neighborNodes[0];
+
+            int distanceFromNode = DistanceBetweenNodes(nodeGrid[ix, iy], closestTo);
+
+            for (int i = 1; i < neighborNodes.Count; i++)
+            {
+                if (distanceFromNode > DistanceBetweenNodes(nodeGrid[ix, iy], neighborNodes[i]))
+                {
+                    distanceFromNode = DistanceBetweenNodes(nodeGrid[ix, iy], neighborNodes[i]);
+                    closestTo = neighborNodes[i];
+                }
+            }
+
+            return closestTo;
+        }
+
         return nodeGrid[ix, iy];
     }
 
@@ -70,8 +109,6 @@ public class AStarPathing : MonoBehaviour
 
         List<Node> openNodes = new List<Node>();
         HashSet<Node> closedNodes = new HashSet<Node>();
-
-        //nodeGrid = GetComponent<AStarGrid>().NodeGrid;
 
         List<Vector2> route = new List<Vector2>();
 
