@@ -60,21 +60,24 @@ public class EnemyAI : MonoBehaviour
 
             Vector2 currentTarget = currentPath[0];
 
-            for (int i = 1; i < currentPath.Count - 1; i++)
+            if (currentPath.Count >= 2)
             {
-                Vector2 h1 = currentTarget - body.position;
-                Vector2 h2 = currentPath[i] - body.position;
+                Vector2 h1 = currentTarget - player.position;
+                Vector2 h2 = currentPath[1] - player.position;
 
-                if(h1.sqrMagnitude > h2.sqrMagnitude)
+                if (h1.sqrMagnitude > h2.sqrMagnitude)
                 {
-                    currentTarget = currentPath[i];
+                    currentTarget = currentPath[1];
                 }
             }
-
             Vector2 heading = currentTarget - body.position;
             float distance = heading.magnitude;
             Vector2 direction = heading / distance;
-            if(moveFromEnemy != Vector2.zero)
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.1f);
+
+            if (moveFromEnemy != Vector2.zero)
             {
                 body.AddForce(moveFromEnemy.normalized * speed);
             }
@@ -82,9 +85,8 @@ public class EnemyAI : MonoBehaviour
             {
                 body.AddForce(direction.normalized * speed, ForceMode2D.Impulse);
             }
-            
 
-            if(heading.sqrMagnitude < 0.1f * 0.1f)
+            if(heading.sqrMagnitude < 0.4f * 0.4f)
             {
                 currentPath.Remove(currentPath[0]);
             }
@@ -104,16 +106,12 @@ public class EnemyAI : MonoBehaviour
         float distanceFromPlayer = (player.position - body.position).sqrMagnitude;
         float maxRange = 3.0f * 3.0f;
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.1f);
-
         moveFromEnemy = Vector2.zero;
 
         foreach (var enemy in Physics2D.CircleCastAll(transform.position, 1f, Vector2.up, 1f, enemyMask))
         {
             if(enemy.collider.gameObject != this.gameObject)
             {
-                Debug.Log(enemy.transform.name);
                 Vector2 hd = (Vector2)enemy.transform.position - body.position;
                 float dist = hd.magnitude;
                 Vector2 dir = hd / dist;
