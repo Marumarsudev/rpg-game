@@ -67,7 +67,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: 8139535265ee9da4c98bea014c1e8b5c, type: 3}
   m_Color: {r: 0.754717, g: 0.70375675, b: 0.55891776, a: 1}
   m_FlipX: 1
@@ -92,13 +92,13 @@ GameObject:
   - component: {fileID: 5991599676439016841}
   - component: {fileID: 5991599676439016840}
   - component: {fileID: 2022625915778356074}
-  - component: {fileID: 1215870616199766572}
   - component: {fileID: 635781151712322849}
   - component: {fileID: 5809096508837278491}
   - component: {fileID: 3090981393865446529}
-  m_Layer: 0
+  - component: {fileID: 4419566425133690915}
+  m_Layer: 9
   m_Name: Enemy
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,7 +156,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 50
   m_Sprite: {fileID: 21300000, guid: f808004cde08a0940bf6f66fad6bcb75, type: 3}
   m_Color: {r: 0.15294118, g: 0.19411242, b: 0.54901963, a: 1}
   m_FlipX: 0
@@ -220,22 +220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c30b97d4f530b40408b0c8bbe72964ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &1215870616199766572
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5991599676439016834}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!114 &635781151712322849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5cb9ba3471e7b049ba8308c41a670a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 10
 --- !u!114 &3090981393865446529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e72b9644164f4c43a9862ee03da5e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitUntilAttack:
+    min: 3
+    max: 5
+  maxRangeFromPlayer: 3
   speed: 2.5
   mask:
     serializedVersion: 2
@@ -280,6 +268,32 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 512
+--- !u!61 &4419566425133690915
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5991599676439016834}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.0625, y: 0.625}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.0625, y: 0.625}
+  m_EdgeRadius: 0
 --- !u!1 &5991599677153225912
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +362,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 8139535265ee9da4c98bea014c1e8b5c, type: 3}
   m_Color: {r: 0.75686276, g: 0.7058824, b: 0.56078434, a: 1}
   m_FlipX: 0
@@ -427,9 +441,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: 61090cf6af47422459d92dc33ee08867, type: 3}
-  m_Color: {r: 0.3679245, g: 0.30255738, b: 0.21346565, a: 0.94509804}
+  m_Color: {r: 0.3679245, g: 0.30255738, b: 0.21346565, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     //Managers
     private InputManager InputManager;
+
+    //Dependencies
+    private Health health;
+    private Text hpText;
 
     //Components
     private Rigidbody2D body;
@@ -24,12 +29,15 @@ public class PlayerMovement : MonoBehaviour
         InputManager = FindObjectOfType<InputManager>();
         body = GetComponent<Rigidbody2D>();
         animationManager = GetComponent<AnimationManager>();
-        //animator = GetComponent<Animator>();
+        health = GetComponent<Health>();
+        hpText = GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        hpText.text = "Hitpoints: " + health.CurrentHealth.ToString() + "/" + health.MaxHealth.ToString();
+
         moveDirection = InputManager.GetMovement();
         lookDirection = Vector2.ClampMagnitude((Vector2)InputManager.GetMousePosition() - body.position, 1.0f);
 

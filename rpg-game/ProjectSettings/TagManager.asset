@@ -6,6 +6,8 @@ TagManager:
   tags:
   - EnemySpawner
   - Enemy
+  - PlayerHP
+  - Dead
   layers:
   - Default
   - TransparentFX

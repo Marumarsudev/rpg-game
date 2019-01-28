@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
@@ -9,13 +10,27 @@ public class InputManager : MonoBehaviour
     private void Awake()
     {
         mainCamera = FindObjectOfType<Camera>();
-        DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     public Vector2 GetMovement() => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
     public Vector2 GetAim() => new Vector2(Input.GetAxis("HorizontalAim"), Input.GetAxis("VerticalAim")).normalized;
 
-    public Vector3 GetMousePosition() => mainCamera.ScreenToWorldPoint(Input.mousePosition);
+    public Vector3 GetMousePosition()
+    { 
+        if(mainCamera)
+            return mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        
+        return Vector3.zero;
+    }
 
     public bool GetAttack() => Input.GetButton("Attack");
     public bool GetAttackDown() => Input.GetButtonDown("Attack");
