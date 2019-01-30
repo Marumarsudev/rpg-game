@@ -10,7 +10,7 @@ public class AnimationManager : MonoBehaviour
     private AnimatorOverrideController animatorOverrideController;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         animator = GetComponent<Animator>();
         weapon = GetComponentInChildren<WeaponBase>();

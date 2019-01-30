@@ -52,7 +52,11 @@ public class Health : MonoBehaviour
         body.velocity = Vector2.zero;
         coll.enabled = false;
         LeanTween.alpha(this.gameObject, 0.0f, 2.0f).setOnComplete(() => {
-            spawner.RemoveFromList(this.gameObject);
+            if(GetComponent<EnemyAI>())
+            {
+                spawner.RemoveFromList(this.gameObject);
+            }
+            
             Destroy(this.gameObject);
             });
     }

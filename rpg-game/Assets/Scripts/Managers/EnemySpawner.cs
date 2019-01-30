@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     void Awake()
     {
         waveText = GameObject.FindGameObjectWithTag("WaveText").GetComponent<Text>();
-        waveText.canvasRenderer.SetAlpha(0);
+        LeanTween.alphaText(waveText.rectTransform, 0, 0f);
     }
 
     // Start is called before the first frame update
@@ -36,9 +36,8 @@ public class EnemySpawner : MonoBehaviour
             spawnAmount++;
 
             waveText.text = "Wave " + spawnAmount.ToString();
-
             LeanTween.alphaText(waveText.rectTransform, 1, 1f).setOnComplete(() => {
-                LeanTween.alphaText(waveText.rectTransform, 0, 1f);
+                LeanTween.alphaText(waveText.rectTransform, 0, 1f).setDelay(0.5f);
             });
 
             SpawnWave();

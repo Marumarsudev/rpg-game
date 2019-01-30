@@ -12,6 +12,7 @@ public class WeaponBase : MonoBehaviour
     public AnimationClip[] weaponAnimations;
     public float damage;
     public float range;
+    public float turnRate;
 
     // Start is called before the first frame update
     void Awake()

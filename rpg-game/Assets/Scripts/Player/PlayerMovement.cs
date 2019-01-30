@@ -32,13 +32,13 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isAttacking = false;
 
-    private const float turnWhileAttackRate = 0.3f;
+    private float turnWhileAttackRate = 0.0f;
     private float turnWhileAttackTime = 0.0f;
 
     private LTDescr turnTween;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         InputManager = FindObjectOfType<InputManager>();
         body = GetComponent<Rigidbody2D>();
@@ -46,13 +46,17 @@ public class PlayerMovement : MonoBehaviour
         health = GetComponent<Health>();
         hpText = GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Text>();
         weapon = GetComponentInChildren<WeaponBase>();
+        turnWhileAttackRate = weapon.turnRate;
     }
 
     void FixedUpdate()
     {
-        Move(moveDirection, speed);
-        Turn(lookDirection);
-        DashSpeedDecrease(dashSpeedDecreaseRate);
+        if(health.CurrentHealth > 0)
+        {
+            Move(moveDirection, speed);
+            Turn(lookDirection);
+            DashSpeedDecrease(dashSpeedDecreaseRate);
+        }
     }
 
     // Update is called once per frame
@@ -124,14 +128,14 @@ public class PlayerMovement : MonoBehaviour
             turnWhileAttackTime = 0.0f;
             isAttacking = true;
         }
-        else if (turnWhileAttackTime >= turnWhileAttackRate)
+        else if (turnWhileAttackTime >= turnWhileAttackRate || turnWhileAttackRate == 0.0f)
         {
-            if(animationManager.GetFloat("Attacking") < 0.01f)
+            if(animationManager.GetFloat("Attacking") < 0.01f || turnWhileAttackRate == 0.0f)
             {
                 LeanTween.cancel(this.gameObject);
                 isAttacking = false;
                 turnWhileAttackTime = turnWhileAttackRate;
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.99f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.95f);
             }
             else
             {

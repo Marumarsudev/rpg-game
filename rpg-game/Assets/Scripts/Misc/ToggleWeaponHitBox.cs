@@ -6,7 +6,7 @@ public class ToggleWeaponHitBox : MonoBehaviour
 {
     private WeaponBase weapon;
 
-    void Awake()
+    void Start()
     {
         weapon = GetComponentInChildren<WeaponBase>();
     }

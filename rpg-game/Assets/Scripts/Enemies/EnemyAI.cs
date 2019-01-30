@@ -53,7 +53,7 @@ public class EnemyAI : MonoBehaviour
     private Vector2 avoidOtherEnemies;
 
 
-    void Awake()
+    void Start()
     {
         pathing = FindObjectOfType<AStarPathing>();
         if(GameObject.FindGameObjectWithTag("Player"))
