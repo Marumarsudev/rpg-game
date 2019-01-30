@@ -11,11 +11,6 @@ public class ToggleWeaponHitBox : MonoBehaviour
         weapon = GetComponentInChildren<WeaponBase>();
     }
 
-    public void ClearCollidersHit()
-    {
-        weapon.ClearCollidersHit();
-    }
-
     public void SetWeaponHitBoxOn()
     {
         weapon.EnableHitBox();
@@ -24,6 +19,5 @@ public class ToggleWeaponHitBox : MonoBehaviour
     public void SetWeaponHitBoxOff()
     {
         weapon.DisableHitBox();
-        weapon.ClearCollidersHit();
     }
 }

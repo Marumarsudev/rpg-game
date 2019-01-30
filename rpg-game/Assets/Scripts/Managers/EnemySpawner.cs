@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -11,17 +13,35 @@ public class EnemySpawner : MonoBehaviour
 
     private HashSet<GameObject> enemies = new HashSet<GameObject>();
 
-    private int spawnAmount = 1;
+    private Text waveText;
+
+    private int spawnAmount = 0;
+
+    private bool spawning = false;
 
     private int enemyID = 0;
+
+    void Awake()
+    {
+        waveText = GameObject.FindGameObjectWithTag("WaveText").GetComponent<Text>();
+        waveText.canvasRenderer.SetAlpha(0);
+    }
 
     // Start is called before the first frame update
     void Update()
     {
-        if(enemies.Count == 0)
+        if(enemies.Count == 0 && !spawning)
         {
-            SpawnWave();
+            spawning = true;
             spawnAmount++;
+
+            waveText.text = "Wave " + spawnAmount.ToString();
+
+            LeanTween.alphaText(waveText.rectTransform, 1, 1f).setOnComplete(() => {
+                LeanTween.alphaText(waveText.rectTransform, 0, 1f);
+            });
+
+            SpawnWave();
         }
     }
 
@@ -35,19 +55,28 @@ public class EnemySpawner : MonoBehaviour
         enemies.Remove(gO);
     }
 
-    private void SpawnWave()
+    private async void SpawnWave()
     {
-        while(enemies.Count < spawnAmount)
-        {
-            Vector3 spoint = spawnPoints[Mathf.RoundToInt(Random.Range(0, spawnPoints.Count))].position;
+        Vector3 spoint = spawnPoints[Mathf.RoundToInt(Random.Range(0, spawnPoints.Count))].position;
 
-            if(!Physics2D.CircleCast(spoint, 1.5f, Vector2.zero))
-            {
-                GameObject gO = Instantiate(enemy, spoint, Quaternion.identity);
-                gO.name = "Enemy " + enemyID.ToString();
-                enemyID++;
-                enemies.Add(gO);
-            }
+        if(!Physics2D.CircleCast(spoint, 1f, Vector2.zero))
+        {
+            GameObject gO = Instantiate(enemy, spoint, Quaternion.identity);
+            gO.name = "Enemy " + enemyID.ToString();
+            enemyID++;
+            enemies.Add(gO);
+        }
+
+        if(enemies.Count < spawnAmount)
+        {
+            Debug.Log(enemies.Count + " " + spawnAmount);
+            await Task.Delay(250);
+            SpawnWave();
+        }
+        else
+        {
+            spawning = false;
+            return;
         }
     }
 

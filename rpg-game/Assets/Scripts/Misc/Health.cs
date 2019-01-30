@@ -13,7 +13,7 @@ public class Health : MonoBehaviour
     private Collider2D coll;
 
     [SerializeField]
-    private float maxHealth;
+    private float maxHealth = 0;
     private float currentHealth;
 
     public float MaxHealth { get => maxHealth; }
@@ -33,7 +33,6 @@ public class Health : MonoBehaviour
     {
         if (currentHealth > 0)
         {
-            Debug.Log("Took dmg!!!");
             animationManager.SetTrigger("Damage");
             currentHealth -= dmg;
             if(currentHealth <= 0)
@@ -50,9 +49,11 @@ public class Health : MonoBehaviour
     private void Death()
     {
         this.gameObject.tag = "Dead";
-        spawner.RemoveFromList(this.gameObject);
         body.velocity = Vector2.zero;
         coll.enabled = false;
-        LeanTween.alpha(this.gameObject, 0.0f, 2.0f).setOnComplete(() => {Destroy(this.gameObject);});
+        LeanTween.alpha(this.gameObject, 0.0f, 2.0f).setOnComplete(() => {
+            spawner.RemoveFromList(this.gameObject);
+            Destroy(this.gameObject);
+            });
     }
 }

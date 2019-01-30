@@ -22,11 +22,18 @@ public class PlayerMovement : MonoBehaviour
     private float speed = 0.0f;
     [SerializeField]
     private float dashMaxSpeed = 0.0f;
+    [SerializeField]
+    private float dashSpeedDecreaseRate = 0.05f;
 
     private Vector2 moveDirection;
     private Vector2 lookDirection;
 
     private float currentDashSpeed = 1.0f;
+
+    private bool isAttacking = false;
+
+    private const float turnWhileAttackRate = 0.3f;
+    private float turnWhileAttackTime = 0.0f;
 
     private LTDescr turnTween;
 
@@ -45,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Move(moveDirection, speed);
         Turn(lookDirection);
-        DashSpeedDecrease(0.05f);
+        DashSpeedDecrease(dashSpeedDecreaseRate);
     }
 
     // Update is called once per frame
@@ -55,12 +62,9 @@ public class PlayerMovement : MonoBehaviour
 
         if(health.CurrentHealth > 0)
         {
-            moveDirection = InputManager.GetMovement();
+            if(currentDashSpeed <= 1.2f)
+                moveDirection = InputManager.GetMovement();
             lookDirection = Vector2.ClampMagnitude((Vector2)InputManager.GetMousePosition() - body.position, 1.0f);
-        }
-        else
-        {
-            moveDirection = Vector2.zero;
         }
 
         GetInputs();
@@ -70,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetInputs()
     {
-        if(health.CurrentHealth > 0)
+        if(health.CurrentHealth > 0 && currentDashSpeed <= 1.2f)
         {
             if(InputManager.GetAttack())
             {
@@ -92,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
                 animationManager.SetBool("Defending", false);
             }
 
-            if (InputManager.GetDashDown() && currentDashSpeed <= 1.0f)
+            if (InputManager.GetDashDown())
             {
                 currentDashSpeed = dashMaxSpeed;
             }
@@ -115,14 +119,29 @@ public class PlayerMovement : MonoBehaviour
     {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        if(animationManager.GetFloat("Attacking") > 0.5f)
+        if(animationManager.GetFloat("Attacking") > 0.01f && !isAttacking)
         {
-            //transform.rotation = transform.rotation;
+            turnWhileAttackTime = 0.0f;
+            isAttacking = true;
+        }
+        else if (turnWhileAttackTime >= turnWhileAttackRate)
+        {
+            if(animationManager.GetFloat("Attacking") < 0.01f)
+            {
+                LeanTween.cancel(this.gameObject);
+                isAttacking = false;
+                turnWhileAttackTime = turnWhileAttackRate;
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.99f);
+            }
+            else
+            {
+                turnWhileAttackTime = 0.0f;
+                turnTween = LeanTween.rotateZ(this.gameObject, angle - 90, 0.5f);
+            }
         }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.2f);
-            // transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+            turnWhileAttackTime += Time.deltaTime;
         }
     }
 }

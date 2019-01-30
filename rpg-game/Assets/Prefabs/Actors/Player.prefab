@@ -181,7 +181,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
-  dashMaxSpeed: 2.5
+  dashMaxSpeed: 3
+  dashSpeedDecreaseRate: 0.1
 --- !u!50 &5991599676439016841
 Rigidbody2D:
   serializedVersion: 4
@@ -202,7 +203,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!95 &5991599676439016840
 Animator:
   serializedVersion: 3
