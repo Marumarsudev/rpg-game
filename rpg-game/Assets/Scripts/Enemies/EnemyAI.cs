@@ -210,7 +210,7 @@ public class EnemyAI : MonoBehaviour
             case States.Attacking:
                 try
                 {
-                if(Physics2D.Raycast(body.position + direction, direction, distanceFromPlayer).transform.gameObject == target.gameObject)
+                if(Physics2D.Raycast(body.position + direction / 2, direction, distanceFromPlayer).transform.gameObject == target.gameObject)
                 {
                     LookAtTarget(target.position);
                     body.AddForce(direction * speed * attackSpeedMult, ForceMode2D.Impulse);

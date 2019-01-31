@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour
 
     private Text waveText;
 
-    private int spawnAmount = 0;
+    private int spawnAmount = 1;
 
     private bool spawning = false;
 
@@ -33,13 +33,10 @@ public class EnemySpawner : MonoBehaviour
         if(enemies.Count == 0 && !spawning)
         {
             spawning = true;
-            spawnAmount++;
-
             waveText.text = "Wave " + spawnAmount.ToString();
             LeanTween.alphaText(waveText.rectTransform, 1, 1f).setOnComplete(() => {
                 LeanTween.alphaText(waveText.rectTransform, 0, 1f).setDelay(0.5f);
             });
-
             SpawnWave();
         }
     }
@@ -56,27 +53,22 @@ public class EnemySpawner : MonoBehaviour
 
     private async void SpawnWave()
     {
-        Vector3 spoint = spawnPoints[Mathf.RoundToInt(Random.Range(0, spawnPoints.Count))].position;
-
-        if(!Physics2D.CircleCast(spoint, 1f, Vector2.zero))
+        while(enemies.Count < spawnAmount)
         {
-            GameObject gO = Instantiate(enemy, spoint, Quaternion.identity);
-            gO.name = "Enemy " + enemyID.ToString();
-            enemyID++;
-            enemies.Add(gO);
-        }
+            Vector3 spoint = spawnPoints[Mathf.RoundToInt(Random.Range(0, spawnPoints.Count))].position;
 
-        if(enemies.Count < spawnAmount)
-        {
-            Debug.Log(enemies.Count + " " + spawnAmount);
+            if(!Physics2D.CircleCast(spoint, 1f, Vector2.zero))
+            {
+                GameObject gO = Instantiate(enemy, spoint, Quaternion.identity);
+                gO.name = "Enemy " + enemyID.ToString();
+                enemyID++;
+                enemies.Add(gO);
+            }
+
             await Task.Delay(250);
-            SpawnWave();
         }
-        else
-        {
-            spawning = false;
-            return;
-        }
+        spawnAmount++;
+        spawning = false;
     }
 
 }

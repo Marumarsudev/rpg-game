@@ -132,7 +132,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if(animationManager.GetFloat("Attacking") < 0.01f || turnWhileAttackRate == 0.0f)
             {
-                LeanTween.cancel(this.gameObject);
+                if(turnTween != null)
+                    LeanTween.cancel(this.gameObject, turnTween.id);
                 isAttacking = false;
                 turnWhileAttackTime = turnWhileAttackRate;
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle - 90, Vector3.forward), 0.95f);

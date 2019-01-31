@@ -19,21 +19,42 @@ public class Health : MonoBehaviour
     public float MaxHealth { get => maxHealth; }
     public float CurrentHealth { get => currentHealth; }
 
+    private List<DamageColor> sprites = new List<DamageColor>();
+
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         currentHealth = maxHealth;
         animationManager = GetComponent<AnimationManager>();
         coll = GetComponent<Collider2D>();
         body = GetComponent<Rigidbody2D>();
         spawner = FindObjectOfType<EnemySpawner>();
+
+        sprites.Add(GetComponent<DamageColor>());
+
+        foreach(Transform child in transform)
+        {
+            if(child.GetComponent<DamageColor>())
+            {
+                sprites.Add(child.GetComponent<DamageColor>());
+            }
+        }
+
+    }
+
+    private void DamageColor()
+    {
+        sprites.ForEach(gO => {
+            gO.DamageAnim();
+        });
     }
 
     public void TakeDamage(float dmg)
     {
         if (currentHealth > 0)
         {
-            animationManager.SetTrigger("Damage");
+            //animationManager.SetTrigger("Damage");
+            DamageColor();
             currentHealth -= dmg;
             if(currentHealth <= 0)
             {
